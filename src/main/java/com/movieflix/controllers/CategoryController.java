@@ -24,13 +24,18 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Category> findById(@PathVariable long id){
+    public Category findById(@PathVariable long id){
         return categoryService.findById(id);
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public Category createCategory(@RequestBody Category category){
         return categoryService.createCategory(category);
+    }
+
+    @PutMapping("/update/{id}")
+    public Category updateCategory(@PathVariable Long id, @RequestBody Category category){
+        return categoryService.updateCategory(id, category);
     }
 
     @DeleteMapping("/{id}")
