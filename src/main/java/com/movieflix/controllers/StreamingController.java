@@ -1,12 +1,12 @@
 package com.movieflix.controllers;
 
-import com.movieflix.entity.Streaming;
-import com.movieflix.repositories.StreamingRepository;
+import com.movieflix.dto.StreamingRequestDTO;
+import com.movieflix.dto.StreamingResponseDTO;
 import com.movieflix.services.StreamingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -19,29 +19,39 @@ public class StreamingController {
     private final StreamingService streamingService;
 
     @GetMapping
-    public List<Streaming> findAll(){
-        return streamingService.findAll();
+    public ResponseEntity<List<StreamingResponseDTO>> findAll(){
+        return ResponseEntity
+                .ok()
+                .body(streamingService.findAll());
     }
 
-    @GetMapping("{id}")
-    public Streaming findById(@PathVariable Long id){
-        return streamingService.findById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<StreamingResponseDTO> findById(@PathVariable Long id){
+        return ResponseEntity
+                .ok()
+                .body(streamingService.findById(id));
     }
 
-    @PostMapping("/save")
-    public Streaming createdStreaming(@RequestBody Streaming streaming){
-        return streamingService.createStreaming(streaming);
+    @PostMapping
+    public ResponseEntity<StreamingResponseDTO> createdStreaming(@RequestBody StreamingRequestDTO streaming){
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(streamingService.createStreaming(streaming));
     }
 
-    @PutMapping("/update/{id}")
-    public Streaming updatedStreaming(@PathVariable Long id, @RequestBody Streaming streaming){
-        return streamingService.updateStreaming(id, streaming);
+    @PutMapping("/{id}")
+    public ResponseEntity<StreamingResponseDTO> updatedStreaming(@PathVariable Long id, @RequestBody StreamingRequestDTO streaming){
+        return ResponseEntity
+                .ok()
+                .body(streamingService.updateStreaming(id, streaming));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteById(Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id){
         streamingService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
 }
