@@ -2,6 +2,7 @@ package com.movieflix.controllers;
 
 import com.movieflix.dto.MovieRequestDTO;
 import com.movieflix.dto.MovieResponseDTO;
+import com.movieflix.mapper.MovieMapper;
 import com.movieflix.services.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,17 @@ public class MovieController {
                 .body(movie);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<MovieResponseDTO>> findByCategory(@RequestParam Long categoryId){
+        List<MovieResponseDTO> movies = movieService.findByCategory(categoryId);
+        return ResponseEntity
+                .ok()
+                .body(movies);
+    }
+
     @PostMapping
     public ResponseEntity<MovieResponseDTO> createMovie(@RequestBody MovieRequestDTO movieRequest){
-        MovieResponseDTO movie = movieService.createMovie(movieRequest);
+        MovieResponseDTO movie = movieService.createMovie(MovieMapper.map(movieRequest));
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(movie);
@@ -43,7 +52,7 @@ public class MovieController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MovieResponseDTO> updateMovie(@PathVariable Long id, @RequestBody MovieRequestDTO movieRequest){
-        MovieResponseDTO movie = movieService.UpdateMovie(id, movieRequest);
+        MovieResponseDTO movie = movieService.UpdateMovie(id, MovieMapper.map(movieRequest));
         return ResponseEntity
                 .ok()
                 .body(movie);

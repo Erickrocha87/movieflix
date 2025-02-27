@@ -3,15 +3,14 @@ package com.movieflix.mapper;
 import com.movieflix.dto.StreamingRequestDTO;
 import com.movieflix.dto.StreamingResponseDTO;
 import com.movieflix.entity.Streaming;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 
-@Component
+@UtilityClass
 public class StreamingMapper {
 
     public Streaming map(StreamingRequestDTO requestDTO){
         return Streaming
                 .builder()
-                .id(requestDTO.id())
                 .name(requestDTO.name())
                 .build();
     }

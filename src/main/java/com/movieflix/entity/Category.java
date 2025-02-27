@@ -19,6 +19,8 @@ public class Category {
     @Column(length = 100, nullable = false)
     private String name;
 
-
+    public Category(Long id) {
+        this.id = id;
+    }
 
 }

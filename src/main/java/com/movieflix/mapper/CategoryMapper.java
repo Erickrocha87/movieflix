@@ -3,15 +3,14 @@ package com.movieflix.mapper;
 import com.movieflix.dto.CategoryRequestDTO;
 import com.movieflix.dto.CategoryResponseDTO;
 import com.movieflix.entity.Category;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 
-@Component
+@UtilityClass
 public class CategoryMapper {
 
     public Category map(CategoryRequestDTO categoryRequestDTO){
         return Category
                 .builder()
-                .id(categoryRequestDTO.id())
                 .name(categoryRequestDTO.name())
                 .build();
     }

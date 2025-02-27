@@ -16,29 +16,24 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StreamingService {
 
-    private final StreamingMapper streamingMapper;
-
     private final StreamingRepository streamingRepository;
 
     public List<StreamingResponseDTO> findAll(){
        List<Streaming> list = streamingRepository.findAll();
         return list
                 .stream()
-                .map(streamingMapper::map)
+                .map(StreamingMapper::map)
                 .collect(Collectors.toList());
     }
 
-    public StreamingResponseDTO findById(Long id){
-        Optional<Streaming> streaming = streamingRepository.findById(id);
-        return streaming
-                .map(streamingMapper::map)
-                .orElseThrow(() -> new RuntimeException("Stream Not Found. Id: " + id));
+    public Optional<Streaming> findById(Long id){
+        return streamingRepository.findById(id);
     }
 
     public StreamingResponseDTO createStreaming(StreamingRequestDTO streamingRequestDTO){
-        Streaming streaming = streamingMapper.map(streamingRequestDTO);
+        Streaming streaming = StreamingMapper.map(streamingRequestDTO);
         streamingRepository.save(streaming);
-        return streamingMapper.map(streaming);
+        return StreamingMapper.map(streaming);
     }
 
     public void deleteById(Long id){
@@ -50,9 +45,9 @@ public class StreamingService {
         Optional<Streaming> verfiryStreaming = streamingRepository.findById(id);
         if(verfiryStreaming.isPresent()){
             updatedStreaming.setId(id);
-            updatedStreaming = streamingMapper.map(streamingRequestDTO);
+            updatedStreaming.setName(streamingRequestDTO.name());
             streamingRepository.save(updatedStreaming);
-            return streamingMapper.map(updatedStreaming);
+            return StreamingMapper.map(updatedStreaming);
         }
         return null;
     }

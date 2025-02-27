@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "steaming")
+@Table(name = "streaming")
 public class Streaming {
 
     @Id
@@ -19,4 +19,7 @@ public class Streaming {
     @Column(length = 100, nullable = false)
     private String name;
 
+    public Streaming(Long id) {
+        this.id = id;
+    }
 }

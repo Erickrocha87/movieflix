@@ -2,6 +2,7 @@ package com.movieflix.controllers;
 
 import com.movieflix.dto.CategoryRequestDTO;
 import com.movieflix.dto.CategoryResponseDTO;
+import com.movieflix.mapper.CategoryMapper;
 import com.movieflix.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,10 +29,10 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponseDTO> findById(@PathVariable long id){
-        CategoryResponseDTO category = categoryService.findById(id);
-        return ResponseEntity
-                .ok()
-                .body(category);
+        return categoryService.findById(id)
+                .map(category -> ResponseEntity.ok().body(CategoryMapper.map(category)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 
     @PostMapping

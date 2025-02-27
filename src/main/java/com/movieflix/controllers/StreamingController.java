@@ -2,6 +2,7 @@ package com.movieflix.controllers;
 
 import com.movieflix.dto.StreamingRequestDTO;
 import com.movieflix.dto.StreamingResponseDTO;
+import com.movieflix.mapper.StreamingMapper;
 import com.movieflix.services.StreamingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,9 +28,9 @@ public class StreamingController {
 
     @GetMapping("/{id}")
     public ResponseEntity<StreamingResponseDTO> findById(@PathVariable Long id){
-        return ResponseEntity
-                .ok()
-                .body(streamingService.findById(id));
+        return streamingService.findById(id)
+                .map(streaming -> ResponseEntity.ok().body(StreamingMapper.map(streaming)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping

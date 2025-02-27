@@ -16,20 +16,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryService {
 
-    private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
 
-    public CategoryResponseDTO findById(Long id){
-        Optional<Category> category = categoryRepository.findById(id);
-        return category
-                .map(categoryMapper::map)
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+    public Optional<Category> findById(Long id) {
+        return categoryRepository.findById(id);
     }
 
     public CategoryResponseDTO createCategory(CategoryRequestDTO categoryRequestDTO){
-        Category category = categoryMapper.map(categoryRequestDTO);
+        Category category = CategoryMapper.map(categoryRequestDTO);
         categoryRepository.save(category);
-        return categoryMapper.map(category);
+        return CategoryMapper.map(category);
     }
 
     public void deleteById(Long id){
@@ -41,9 +37,9 @@ public class CategoryService {
         Category updatedCategory = new Category();
         if (verifyCategory.isPresent()){
             updatedCategory.setId(id);
-            updatedCategory = categoryMapper.map(category);
+            updatedCategory.setName(category.name());
             categoryRepository.save(updatedCategory);
-            return categoryMapper.map(updatedCategory);
+            return CategoryMapper.map(updatedCategory);
         }
         return null;
     }
@@ -52,7 +48,7 @@ public class CategoryService {
         List<Category> listCategory = categoryRepository.findAll();
         return listCategory
                 .stream()
-                .map(categoryMapper::map)
+                .map(CategoryMapper::map)
                 .collect(Collectors.toList());
     }
 }
