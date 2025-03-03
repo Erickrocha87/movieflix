@@ -4,6 +4,7 @@ import com.movieflix.dto.StreamingRequestDTO;
 import com.movieflix.dto.StreamingResponseDTO;
 import com.movieflix.mapper.StreamingMapper;
 import com.movieflix.services.StreamingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +35,14 @@ public class StreamingController {
     }
 
     @PostMapping
-    public ResponseEntity<StreamingResponseDTO> createdStreaming(@RequestBody StreamingRequestDTO streaming){
+    public ResponseEntity<StreamingResponseDTO> createdStreaming(@Valid @RequestBody StreamingRequestDTO streaming){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(streamingService.createStreaming(streaming));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StreamingResponseDTO> updatedStreaming(@PathVariable Long id, @RequestBody StreamingRequestDTO streaming){
+    public ResponseEntity<StreamingResponseDTO> updatedStreaming(@PathVariable Long id, @Valid @RequestBody StreamingRequestDTO streaming){
         return ResponseEntity
                 .ok()
                 .body(streamingService.updateStreaming(id, streaming));

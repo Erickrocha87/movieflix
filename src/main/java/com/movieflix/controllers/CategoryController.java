@@ -4,6 +4,7 @@ import com.movieflix.dto.CategoryRequestDTO;
 import com.movieflix.dto.CategoryResponseDTO;
 import com.movieflix.mapper.CategoryMapper;
 import com.movieflix.services.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody CategoryRequestDTO categoryRequest){
+    public ResponseEntity<CategoryResponseDTO> createCategory(@Valid @RequestBody CategoryRequestDTO categoryRequest){
         CategoryResponseDTO category = categoryService.createCategory(categoryRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -44,7 +45,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryRequestDTO categoryRequest){
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequestDTO categoryRequest){
         CategoryResponseDTO category = categoryService.updateCategory(id, categoryRequest);
         return ResponseEntity
                 .ok()

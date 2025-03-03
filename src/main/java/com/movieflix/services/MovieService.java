@@ -39,7 +39,7 @@ public class MovieService {
     }
 
     public List<MovieResponseDTO> findByCategory(Long categoryId){
-       List<Movie> movieList = movieRepository.findMovieByCategory(List.of(Category.builder().id(categoryId).build()));
+       List<Movie> movieList = movieRepository.findMovieByCategories(List.of(Category.builder().id(categoryId).build()));
        return movieList.stream()
                .map(MovieMapper::map)
                .collect(Collectors.toList());
@@ -78,8 +78,6 @@ public class MovieService {
     public MovieResponseDTO UpdateMovie(Long id, Movie movie){
         Optional<Movie> verifyMovie = movieRepository.findById(id);
         if (verifyMovie.isPresent()){
-            List<Category> categories = this.findCategories(movie.getCategories());
-            List<Streaming> streamings = this.findStreamings(movie.getStreamings());
 
             Movie movieUpt = verifyMovie.get();
             movieUpt.setTitle(movie.getTitle());
@@ -88,13 +86,13 @@ public class MovieService {
             movieUpt.setRating(movie.getRating());
 
             movieUpt.getStreamings().clear();
-            movieUpt.getStreamings().addAll(streamings);
+            movieUpt.getStreamings().addAll(this.findStreamings(movie.getStreamings()));
 
             movieUpt.getCategories().clear();
-            movieUpt.getCategories().addAll(categories);
+            movieUpt.getCategories().addAll(this.findCategories(movie.getCategories()));
 
-            movieRepository.save(movie);
-            return MovieMapper.map(movie);
+            movieRepository.save(movieUpt);
+            return MovieMapper.map(movieUpt);
         }
         return null;
     }
